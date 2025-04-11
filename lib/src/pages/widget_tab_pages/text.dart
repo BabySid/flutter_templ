@@ -1,3 +1,5 @@
+import 'dart:math' as math show pi;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
 import 'package:flutter_teml/src/widgets/link_text_span.dart' show LinkText;
@@ -78,6 +80,7 @@ class _WidgetTextPageState extends State<WidgetTextPage> {
               decoration: BoxDecoration(
                 color: Colors.yellow,
                 gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+                borderRadius: BorderRadius.circular(10.0),
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black,
@@ -107,6 +110,88 @@ class _WidgetTextPageState extends State<WidgetTextPage> {
                   letterSpacing: 5.0,
                 ),
               ),
+            ),
+            Divider(),
+            Container(
+              alignment: Alignment.center,
+              width: 300,
+              color: Colors.teal,
+              child: Transform(
+                alignment: Alignment.topRight, //相对于坐标系原点的对齐方式
+                transform: Matrix4.skewY(0.3), //沿Y轴倾斜0.3弧度
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: Colors.deepOrange,
+                  child: const Text('沿Y轴倾斜变换'),
+                ),
+              ),
+            ),
+            Divider(),
+            Container(
+              alignment: Alignment.center,
+              color: Colors.teal,
+              width: 300,
+              child: Transform.translate(
+                offset: Offset(-50.0, 10.0),
+                child: Text("Transform.translate"),
+              ),
+            ),
+            Divider(),
+            Container(
+              alignment: Alignment.center,
+              color: Colors.teal,
+              width: 300,
+              height: 300,
+              child: Transform.rotate(
+                angle: math.pi / 2,
+                child: Text("Transform.rotate"),
+              ),
+            ),
+            Divider(),
+            Container(
+              alignment: Alignment.center,
+              color: Colors.teal,
+              width: 300,
+              height: 100,
+              child: Transform.scale(
+                scale: 1.5,
+                child: Text("Transform.scale"),
+              ),
+            ),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                DecoratedBox(
+                  decoration: BoxDecoration(color: Colors.red),
+                  child: Transform.scale(
+                    scale: 0.5,
+                    child: Text("Transform.scale"),
+                  ),
+                ),
+                Text(
+                  "Transform发生在绘制而不是布局阶段",
+                  style: TextStyle(color: Colors.green, fontSize: 18.0),
+                ),
+              ],
+            ),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                DecoratedBox(
+                  decoration: BoxDecoration(color: Colors.red),
+                  //将Transform.rotate换成RotatedBox
+                  child: RotatedBox(
+                    quarterTurns: 1, //旋转90度(1/4圈)
+                    child: Text("RotatedBox-90度"),
+                  ),
+                ),
+                Text(
+                  "RotatedBox发生在布局而不是绘制阶段",
+                  style: TextStyle(color: Colors.green, fontSize: 18.0),
+                ),
+              ],
             ),
             Divider(),
             const LinkText(

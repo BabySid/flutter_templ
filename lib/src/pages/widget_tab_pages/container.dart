@@ -49,8 +49,11 @@ class WidgetContainerPage extends StatelessWidget implements NameProvider {
               width: 200,
               decoration: BoxDecoration(
                 color: Colors.yellow,
-                gradient: const LinearGradient(
-                  colors: [Colors.red, Colors.blue],
+                gradient: const RadialGradient(
+                  //背景径向渐变
+                  colors: [Colors.red, Colors.orange],
+                  center: Alignment.topLeft,
+                  radius: .98,
                 ),
                 boxShadow: const [
                   BoxShadow(

@@ -44,11 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: buildDrawer(),
       endDrawer: buildEndDrawer(),
       body: _pages[_currentIndex], // 主页面内容
-      bottomNavigationBar: buildBottomNavBar(),
+      bottomNavigationBar: buildBottomNavBarUseBottomAppBar(),
       floatingActionButton: buildFloatingActionBtn(),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation
-              .miniCenterDocked, // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -90,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   BottomNavigationBar buildBottomNavBar() {
     return BottomNavigationBar(
       fixedColor: Colors.red, //选中的颜色
+      //selectedItemColor: Colors.amber[800],
       //iconSize: 35, //底部菜单大小
       currentIndex: _currentIndex, //第几个菜单选中
       type: BottomNavigationBarType.fixed, //如果底部有4个或者4个以上的菜单的时候就需要配置这个参数
@@ -108,6 +107,39 @@ class _MyHomePageState extends State<MyHomePage> {
         BottomNavigationBarItem(icon: Icon(Icons.list), label: "Animation"),
         BottomNavigationBarItem(icon: Icon(Icons.pageview), label: "PageView"),
       ],
+    );
+  }
+
+  BottomAppBar buildBottomNavBarUseBottomAppBar() {
+    return BottomAppBar(
+      color: Colors.white,
+      shape: CircularNotchedRectangle(), // 底部导航栏打一个圆形的洞
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          ElevatedButton.icon(
+            icon: Icon(Icons.widgets),
+            onPressed: () => {},
+            label: Text("Widget"),
+          ),
+          ElevatedButton.icon(
+            icon: Icon(Icons.category),
+            onPressed: () => {},
+            label: Text("Route"),
+          ),
+          SizedBox(), //中间位置空出
+          ElevatedButton.icon(
+            icon: Icon(Icons.list),
+            onPressed: () => {},
+            label: Text("Animation"),
+          ),
+          ElevatedButton.icon(
+            icon: Icon(Icons.business),
+            onPressed: () => {},
+            label: Text("PageView"),
+          ),
+        ], //均分底部导航栏横向空间
+      ),
     );
   }
 
