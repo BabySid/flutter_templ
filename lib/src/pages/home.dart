@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: buildDrawer(),
       endDrawer: buildEndDrawer(),
       body: _pages[_currentIndex], // 主页面内容
-      bottomNavigationBar: buildBottomNavBarUseBottomAppBar(),
+      bottomNavigationBar: buildBottomNavBar(),
       floatingActionButton: buildFloatingActionBtn(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
