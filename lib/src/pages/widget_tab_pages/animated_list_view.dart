@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_teml/src/utils/keep_alive_wapper.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
 
 class WidgetAnimatedListViewPage extends StatefulWidget
@@ -43,13 +42,26 @@ class _WidgetAnimatedListViewPageState extends State<WidgetAnimatedListViewPage>
       flag = false;
       //执行删除
       _globalKey.currentState!.removeItem(index, (context, animation) {
+        var removeItem = _buildItem(
+          index,
+        ); // 先build待删除的item。然后再从list中删除，否则会panic
+
         //animation的值是从1到0
-        var removeItem = _buildItem(index);
         list.removeAt(index); //数组中删除数据
-        return ScaleTransition(
-          // opacity: animation,
-          scale: animation,
-          child: removeItem, //删除的时候执行动画的元素
+
+        return FadeTransition(
+          opacity: CurvedAnimation(
+            parent: animation,
+            //让透明度变化的更快一些
+            curve: const Interval(0.5, 1.0),
+          ),
+          //scale: animation,
+          // 不断缩小列表项的高度
+          child: SizeTransition(
+            sizeFactor: animation,
+            axisAlignment: 0.0,
+            child: removeItem,
+          ), //删除的时候执行动画的元素
         );
       });
       //解决快速删除的bug

@@ -29,7 +29,7 @@ class WidgetIconFontPage extends StatelessWidget implements NameProvider {
             Icon(MyIcons.wechat, color: Colors.green),
             Divider(),
             const Text(
-              "This is a 阿里妈妈刀隶体. 1234567890",
+              "SingleChildScrollView只应在期望的内容不会超过屏幕太多时使用，因为不支持基于 Sliver 的延迟加载模型",
               style: TextStyle(fontFamily: "AliMamaDaoLi", fontSize: 32),
             ),
           ],

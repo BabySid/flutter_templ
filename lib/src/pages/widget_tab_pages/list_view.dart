@@ -17,6 +17,8 @@ class WidgetListViewPage extends StatefulWidget implements NameProvider {
 class _WidgetListViewPageState extends State<WidgetListViewPage>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
+  bool _showToTopBtn = false; //是否显示“返回到顶部”按钮
+
   final GlobalKey _lastItemKey = GlobalKey();
 
   late AnimationController _animationController;
@@ -114,6 +116,20 @@ class _WidgetListViewPageState extends State<WidgetListViewPage>
       duration: Duration(milliseconds: 500),
     );
     _initListItems();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge &&
+          _scrollController.position.pixels > 0 &&
+          !_showToTopBtn) {
+        setState(() {
+          _showToTopBtn = true;
+        });
+      } else {
+        setState(() {
+          _showToTopBtn = false;
+        });
+      }
+    });
   }
 
   @override
@@ -180,14 +196,32 @@ class _WidgetListViewPageState extends State<WidgetListViewPage>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size; // 屏幕尺寸
+
+    final Widget divider1 = Divider(color: Colors.blue);
+    final Widget divider2 = Divider(color: Colors.orange);
 
     return Scaffold(
+      floatingActionButton:
+          !_showToTopBtn
+              ? null
+              : FloatingActionButton(
+                onPressed:
+                    () => {
+                      _scrollController.animateTo(
+                        0,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.ease,
+                      ),
+                    },
+                child: Icon(Icons.arrow_upward),
+              ),
       body: KeepAliveWrapper(
         //动态列表
         child: Stack(
           children: [
-            ListView.builder(
+            // ListView.builder(prototypeItem: ListTile(title: Text("1")),....) // 通过可以预先计算子组件的大小来提高性能
+            ListView.separated(
               controller: _scrollController,
               padding: const EdgeInsets.only(top: 40),
               itemCount: _listItems.length + _newItems.length,
@@ -206,6 +240,9 @@ class _WidgetListViewPageState extends State<WidgetListViewPage>
                   key: _lastItemKey,
                   title: Text(_newItems[_newItems.length - 1]),
                 );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return index % 2 == 0 ? divider1 : divider2;
               },
             ),
             Positioned(
