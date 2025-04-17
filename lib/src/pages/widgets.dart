@@ -13,6 +13,7 @@ import 'package:flutter_teml/src/pages/widget_tab_pages/list_view.dart';
 import 'package:flutter_teml/src/pages/widget_tab_pages/list_view_h.dart';
 import 'package:flutter_teml/src/pages/widget_tab_pages/row_column_flex.dart';
 import 'package:flutter_teml/src/pages/widget_tab_pages/progress_indicator.dart';
+import 'package:flutter_teml/src/pages/widget_tab_pages/scroll_view.dart';
 import 'package:flutter_teml/src/pages/widget_tab_pages/stack_align_pos.dart';
 import 'package:flutter_teml/src/pages/widget_tab_pages/state.dart';
 import 'package:flutter_teml/src/pages/widget_tab_pages/text.dart';
@@ -49,6 +50,7 @@ class _WidgetsState extends State<WidgetsPage>
     const WidgetStatePage(),
     const WidgetProgressIndicatorPage(),
     const WidgetLayoutPage(),
+    const WidgetScrollViewPage(),
   ];
 
   late List<Widget> tabBar;
