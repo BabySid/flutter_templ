@@ -1,6 +1,6 @@
 final homePath = "/home";
 final loginPath = "/login";
-final aiAgentPath = "/ai_agent";
+final functionalityPath = "/functionality";
 final widgetsPath = "/widgets";
 final routesPath = "/routes";
 final pageViewPath = "/page_view";

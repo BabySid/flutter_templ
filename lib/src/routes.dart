@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_teml/src/constants/route_names.dart';
-import 'package:flutter_teml/src/pages/ai_agent.dart';
+import 'package:flutter_teml/src/pages/function.dart';
 import 'package:flutter_teml/src/pages/route_pages/target.dart';
 import 'package:flutter_teml/src/pages/route_pages/target_2nd.dart';
 import 'package:flutter_teml/src/pages/route_pages/target_3rd.dart';
@@ -22,7 +22,7 @@ import 'package:flutter/cupertino.dart';
 final Map<String, WidgetBuilder> _routes = {
   loginPath: (context) => const LoginPage(),
   homePath: (context) => const MyHomePage(),
-  aiAgentPath: (context) => const AIAgentPage(),
+  functionalityPath: (context) => const FunctionalityPage(),
   widgetsPath: (context) => const WidgetsPage(),
   routesPath: (context) => const RoutePage(),
   pageViewPath: (context) => const PageViewPage(),

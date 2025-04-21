@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_teml/src/pages/ai_agent.dart';
+import 'package:flutter_teml/src/pages/function.dart';
 import 'package:flutter_teml/src/pages/widgets.dart';
 import 'package:flutter_teml/src/pages/routes.dart';
 import 'package:flutter_teml/src/pages/animation.dart';
@@ -25,7 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _pages = const [
     WidgetsPage(),
     RoutePage(),
-    AIAgentPage(),
+    FunctionalityPage(),
     AnimationPage(),
     PageViewPage(),
   ];
@@ -101,8 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
         BottomNavigationBarItem(icon: Icon(Icons.widgets), label: "Widget"),
         BottomNavigationBarItem(icon: Icon(Icons.category), label: "Route"),
         BottomNavigationBarItem(
-          icon: Icon(Icons.support_agent),
-          label: "AI-Agent",
+          icon: Icon(Icons.functions),
+          label: "Functionality",
         ),
         BottomNavigationBarItem(icon: Icon(Icons.list), label: "Animation"),
         BottomNavigationBarItem(icon: Icon(Icons.pageview), label: "PageView"),

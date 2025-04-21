@@ -19,7 +19,7 @@ class _FullPageViewPageState extends State<FullPageViewPage> {
   @override
   void initState() {
     super.initState();
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 5; i++) {
       list.add(
         Center(child: Text("第${i + 1}屏", style: const TextStyle(fontSize: 60))),
       );
@@ -34,12 +34,12 @@ class _FullPageViewPageState extends State<FullPageViewPage> {
         onPageChanged: (index) {
           if (index + 2 == list.length) {
             setState(() {
-              for (var i = 0; i < 10; i++) {
+              for (var i = 0; i < 5; i++) {
                 list.add(
                   Center(
                     child: Text(
                       "第${index + 2 + i + 1}屏",
-                      style: const TextStyle(fontSize: 60),
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ),
                 );

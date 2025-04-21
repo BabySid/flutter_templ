@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_teml/src/pages/page_view_tab_pages/full_page_view.dart';
-import 'package:flutter_teml/src/pages/page_view_tab_pages/page_view.dart';
-import 'package:flutter_teml/src/pages/page_view_tab_pages/swiper_page_view.dart';
+import 'package:flutter_teml/src/pages/page_view_pages/full_page_view.dart';
+import 'package:flutter_teml/src/pages/page_view_pages/page_view.dart';
+import 'package:flutter_teml/src/pages/page_view_pages/swiper_page_view.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
 
 class PageViewPage extends StatefulWidget {
@@ -61,24 +61,41 @@ class _PageViewState extends State<PageViewPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: TabBar(
-          labelStyle: const TextStyle(fontSize: 16),
-          isScrollable: true,
-          indicatorColor: Colors.red,
-          labelColor: Colors.teal,
-          unselectedLabelColor: Colors.black,
-          indicatorSize: TabBarIndicatorSize.label,
-          // indicator: BoxDecoration(
-          //   color: Colors.blue,
-          //   borderRadius: BorderRadius.circular(10),
-          // ),
-          controller: _tabController,
-          tabs: tabBar,
+    return Theme(
+      data: ThemeData(
+        primarySwatch: Colors.red,
+        textTheme: TextTheme(
+          headlineLarge: const TextStyle(
+            color: Colors.green,
+            fontSize: 20,
+            decoration: TextDecoration.overline,
+          ),
+          headlineMedium: const TextStyle(
+            color: Colors.blue,
+            fontSize: 16,
+            decoration: TextDecoration.underline,
+          ),
         ),
       ),
-      body: TabBarView(controller: _tabController, children: tabBarView),
+      child: Scaffold(
+        appBar: AppBar(
+          title: TabBar(
+            labelStyle: const TextStyle(fontSize: 16),
+            isScrollable: true,
+            indicatorColor: Colors.red,
+            labelColor: Colors.teal,
+            unselectedLabelColor: Colors.black,
+            indicatorSize: TabBarIndicatorSize.label,
+            // indicator: BoxDecoration(
+            //   color: Colors.blue,
+            //   borderRadius: BorderRadius.circular(10),
+            // ),
+            controller: _tabController,
+            tabs: tabBar,
+          ),
+        ),
+        body: TabBarView(controller: _tabController, children: tabBarView),
+      ),
     );
   }
 }
