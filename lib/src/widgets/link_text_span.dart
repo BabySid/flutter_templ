@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,17 +34,15 @@ class LinkText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TapGestureRecognizer recognizer =
-        TapGestureRecognizer()..onTap = () => _launchUrl(context, url);
-
     return RichText(
       text: TextSpan(
         children: [
           TextSpan(text: "点击访问: ", style: TextStyle(color: Colors.black)),
-          TextSpan(
-            text: displayText,
-            style: TextStyle(color: Colors.blue),
-            recognizer: recognizer,
+          WidgetSpan(
+            child: GestureDetector(
+              onTap: () => _launchUrl(context, url),
+              child: Text(displayText, style: TextStyle(color: Colors.blue)),
+            ),
           ),
         ],
       ),
