@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_teml/src/pages/animate_pages/animated_widget.dart';
 import 'package:flutter_teml/src/pages/animate_pages/animation_container.dart';
 import 'package:flutter_teml/src/pages/animate_pages/animation_opacity.dart';
 import 'package:flutter_teml/src/pages/animate_pages/animation_padding.dart';
@@ -11,6 +12,7 @@ class AnimationPage extends StatelessWidget {
   const AnimationPage({super.key});
 
   static const _tabs = [
+    AnimatedWidgetPage(),
     MyAnimatedSwitcherPage(),
     MyAnimatedContainerPage(),
     MyAnimatedPaddingPage(),
