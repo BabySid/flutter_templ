@@ -69,7 +69,7 @@ class _AnimatedWidgetPageState extends State<AnimatedWidgetPage>
             // 假设如果再添加一个 widget 透明度变化的动画，
             // 那么我们需要再实现一个AnimatedWidget，这样不是很优雅，
             // 如果我们能把渲染过程也抽象出来，那就会好很多，
-            // 而AnimatedBuilder正是将渲染逻辑分离出来, 上面的 build 方法中的代码可以改为
+            // 而AnimatedBuilder正是将渲染逻辑分离出来, 上面_AnimatedImage的 build 方法中的代码可以改为
             AnimatedBuilder(
               animation: animation,
               child: Image.asset("assets/images/img.jpg"),

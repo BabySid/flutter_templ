@@ -34,8 +34,8 @@ class _MyAnimatedContainerPageState extends State<MyAnimatedContainerPage> {
           Center(
             child: AnimatedContainer(
               duration: const Duration(seconds: 1, milliseconds: 100),
-              width: 200,
-              height: 200,
+              width: flag ? 100 : 200,
+              height: flag ? 100 : 200,
               transform:
                   flag
                       ? Matrix4.translationValues(0, 0, 0)
