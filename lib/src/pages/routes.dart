@@ -46,6 +46,30 @@ class _RoutePageState extends State<RoutePage> {
           ElevatedButton(
             onPressed: () async {
               var result = await Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 500),
+                  pageBuilder: (
+                    BuildContext context,
+                    Animation<double> animation,
+                    Animation secondaryAnimation,
+                  ) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: const TargetRoutePage(),
+                    );
+                  },
+                ),
+              );
+              setState(() {
+                _showResult = Text("基本路由跳转 => $result");
+              });
+            },
+            child: const Text("自定义路由切换动画"),
+          ),
+
+          ElevatedButton(
+            onPressed: () async {
+              var result = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (BuildContext context) {
                     return const TargetRoutePage(

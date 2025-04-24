@@ -6,6 +6,7 @@ import 'package:flutter_teml/src/pages/animate_pages/animation_padding.dart';
 import 'package:flutter_teml/src/pages/animate_pages/animation_positioned.dart';
 import 'package:flutter_teml/src/pages/animate_pages/animation_switcher.dart';
 import 'package:flutter_teml/src/pages/animate_pages/animation_text_style.dart';
+import 'package:flutter_teml/src/pages/animate_pages/interwoven_animation.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
 
 class AnimationPage extends StatelessWidget {
@@ -19,6 +20,7 @@ class AnimationPage extends StatelessWidget {
     MyAnimatedOpacityPage(),
     MyAnimatedPositionedPage(),
     MyAnimatedTextStylePage(),
+    InterWovenAnimationPage(),
   ];
 
   @override
