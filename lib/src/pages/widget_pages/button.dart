@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
+import 'package:flutter_teml/src/widgets/gradient_button.dart';
 
 class WidgetButtonPage extends StatefulWidget implements NameProvider {
   static const String _name = "Button";

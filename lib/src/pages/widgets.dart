@@ -3,6 +3,7 @@ import 'package:flutter_teml/src/pages/widget_pages/animated_list_view.dart';
 import 'package:flutter_teml/src/pages/widget_pages/button.dart';
 import 'package:flutter_teml/src/pages/widget_pages/card.dart';
 import 'package:flutter_teml/src/pages/widget_pages/container.dart';
+import 'package:flutter_teml/src/pages/widget_pages/custom_widget.dart';
 import 'package:flutter_teml/src/pages/widget_pages/dialog.dart';
 import 'package:flutter_teml/src/pages/widget_pages/grid_view.dart';
 import 'package:flutter_teml/src/pages/widget_pages/icon_and_font.dart';
@@ -33,6 +34,7 @@ class _WidgetsState extends State<WidgetsPage>
   late TabController _tabController;
 
   final _tabs = [
+    const CustomWidgetPage(),
     const WidgetTextPage(),
     const WidgetContainerPage(),
     const WidgetImgPage(),
