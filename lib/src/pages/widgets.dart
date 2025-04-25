@@ -20,6 +20,7 @@ import 'package:flutter_teml/src/pages/widget_pages/scroll_view.dart';
 import 'package:flutter_teml/src/pages/widget_pages/stack_align_pos.dart';
 import 'package:flutter_teml/src/pages/widget_pages/state.dart';
 import 'package:flutter_teml/src/pages/widget_pages/text.dart';
+import 'package:flutter_teml/src/pages/widget_pages/water_mark.dart';
 import 'package:flutter_teml/src/pages/widget_pages/wrap.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
 
@@ -35,6 +36,7 @@ class _WidgetsState extends State<WidgetsPage>
   late TabController _tabController;
 
   final _tabs = [
+    const WaterMarkPage(),
     const CustomWidgetPage(),
     const CustomPaintAndCanvasPage(),
     const WidgetTextPage(),
