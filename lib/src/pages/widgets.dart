@@ -13,6 +13,7 @@ import 'package:flutter_teml/src/pages/widget_pages/layout.dart';
 import 'package:flutter_teml/src/pages/widget_pages/list_view.dart';
 import 'package:flutter_teml/src/pages/widget_pages/list_view_h.dart';
 import 'package:flutter_teml/src/pages/widget_pages/nested_scroll_view.dart';
+import 'package:flutter_teml/src/pages/widget_pages/paint_canvas.dart';
 import 'package:flutter_teml/src/pages/widget_pages/row_column_flex.dart';
 import 'package:flutter_teml/src/pages/widget_pages/progress_indicator.dart';
 import 'package:flutter_teml/src/pages/widget_pages/scroll_view.dart';
@@ -35,6 +36,7 @@ class _WidgetsState extends State<WidgetsPage>
 
   final _tabs = [
     const CustomWidgetPage(),
+    const CustomPaintAndCanvasPage(),
     const WidgetTextPage(),
     const WidgetContainerPage(),
     const WidgetImgPage(),
