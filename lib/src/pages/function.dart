@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/async_update_ui.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/color_and_theme.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/gesture.dart';
+import 'package:flutter_teml/src/pages/functionality_pages/l10n.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/notification.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/raw_pointer.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/value_listenable_builder.dart';
@@ -25,6 +26,7 @@ class _FunctionalityPageState extends State<FunctionalityPage>
     const RawPointerPage(),
     const GesturePage(),
     const NotificationPage(),
+    const L10nPage(),
   ];
   late List<Widget> tabBar;
   late List<Widget> tabBarView;

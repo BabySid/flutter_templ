@@ -1,0 +1,32 @@
+{
+    "value1": "Value1",
+    "value2": "Value2",
+    "value3": "Value3: two choices: {one}? or {two}",
+    "@value3": {
+        "description": "Value3 description",
+        "type": "string",
+        "placeholders": {
+            "one": {
+                "type": "String",
+                "example": "one"
+            },
+            "two": {
+                "type": "String",
+                "example": "two"
+            }
+        }
+    },
+    "value4": "Value4: date is {date}",
+    "@value4": {
+        "description": "Value4 description",
+        "type": "string",
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yyyy-MM-dd HH:mm:ss",
+                "isCustomDateFormat": "true",
+                "example": "2023-10-01"
+            }
+        }
+    }
+}

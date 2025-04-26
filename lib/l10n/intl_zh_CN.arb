@@ -1,0 +1,32 @@
+{
+    "value1": "值1",
+    "value2": "值2",
+    "value3": "值3:两个选择: {one}? or {two}",
+    "@value3": {
+        "description": "展现两个选择，然后等待选择",
+        "type": "string",
+        "placeholders": {
+            "one": {
+                "type": "String",
+                "example": "one"
+            },
+            "two": {
+                "type": "String",
+                "example": "two"
+            }
+        }
+    },
+    "valuef": "值4: 当前日期：{date}",
+    "@value4": {
+        "description": "Value4 description",
+        "type": "string",
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yyyy-MM-dd HH:mm:ss",
+                "isCustomDateFormat":  "true",
+                "example": "2023-10-01"
+            }
+        }
+    }
+}
