@@ -24,3 +24,4 @@ samples, guidance on mobile development, and a full API reference.
   - https://zhuanlan.zhihu.com/p/466313323
 
 - [Flutter.cn](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
+- JsonModel

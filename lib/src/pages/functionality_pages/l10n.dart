@@ -4,17 +4,17 @@ import 'package:flutter_teml/src/utils/name_provider.dart';
 import 'package:intl/intl.dart';
 
 class L10nPage extends StatefulWidget implements NameProvider {
-  static const String _name = "L18n";
+  static const String _name = "L10n";
   @override
   String get name => _name;
 
   const L10nPage({super.key});
 
   @override
-  State<L10nPage> createState() => _I18nState();
+  State<L10nPage> createState() => _L10nPageState();
 }
 
-class _I18nState extends State<L10nPage> {
+class _L10nPageState extends State<L10nPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
