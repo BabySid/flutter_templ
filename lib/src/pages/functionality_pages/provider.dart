@@ -45,6 +45,7 @@ class _ProviderPageState extends State<ProviderPage> {
           children: [
             Consumer<_ChangeNotifierModel>(
               builder: (context, model, child) {
+                //print("build. model每次变化，每次都出现");
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -59,9 +60,16 @@ class _ProviderPageState extends State<ProviderPage> {
                       },
                       child: const Text("Consumer<ChangeNotifierModel>"),
                     ),
+                    child!,
                   ],
                 );
               },
+              child: Builder(
+                builder: (_) {
+                  // print("build. 只应该出现一次。 model每次变化，也不会build");
+                  return Text("一个不变的文本");
+                },
+              ),
             ),
             // 直接使用 ChangeNotifierProvider 和 Consumer
             // ChangeNotifierProvider(
