@@ -31,8 +31,7 @@ class MyApp extends StatelessWidget {
       // 支持i18n
       localizationsDelegates: [
         S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: S.delegate.supportedLocales,
       localeResolutionCallback:

@@ -35,6 +35,10 @@ class _ProviderPageState extends State<ProviderPage> {
               (_, counter, selector, time, __) =>
                   _CombinedModel(counter.count, selector.message, time),
         ),
+        FutureProvider<_FutureAsyncData>(
+          create: (_) => _FutureModel().fetchData(),
+          initialData: _FutureAsyncData('加载中...'),
+        ),
       ],
       child: Scaffold(
         body: Column(
@@ -163,6 +167,21 @@ class _ProviderPageState extends State<ProviderPage> {
                 );
               },
             ),
+            Divider(),
+            // 精确匹配类型来区分Provider
+            Consumer<_FutureAsyncData>(
+              builder: (context, futureData, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "FutureProvider:异步数据: ${futureData.value}",
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -218,4 +237,16 @@ class _CombinedModel {
 
   @override
   String toString() => 'Count: $count, Message: $message, Time: $time';
+}
+
+class _FutureModel {
+  Future<_FutureAsyncData> fetchData() async {
+    await Future.delayed(const Duration(seconds: 2)); // 模拟网络请求延迟
+    return _FutureAsyncData('异步加载完成的数据');
+  }
+}
+
+class _FutureAsyncData {
+  final String value;
+  _FutureAsyncData(this.value);
 }
