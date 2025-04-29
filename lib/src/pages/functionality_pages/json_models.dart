@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_teml/src/constants/json_models.dart';
+import 'package:flutter_teml/src/models/json_models.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
 
 class JsonModelsPage extends StatefulWidget implements NameProvider {
