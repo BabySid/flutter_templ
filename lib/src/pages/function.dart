@@ -7,6 +7,7 @@ import 'package:flutter_teml/src/pages/functionality_pages/l10n.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/notification.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/provider.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/raw_pointer.dart';
+import 'package:flutter_teml/src/pages/functionality_pages/shared_preferences.dart';
 import 'package:flutter_teml/src/pages/functionality_pages/value_listenable_builder.dart';
 
 import 'package:flutter_teml/src/utils/name_provider.dart';
@@ -31,6 +32,7 @@ class _FunctionalityPageState extends State<FunctionalityPage>
     const L10nPage(),
     const ProviderPage(),
     const JsonModelsPage(),
+    const SharedPreferencesPage(),
   ];
   late List<Widget> tabBar;
   late List<Widget> tabBarView;
