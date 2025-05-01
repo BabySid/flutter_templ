@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_teml/src/app.dart';
+import 'package:flutter_teml/src/constants/global.dart';
 
 void main() {
-  runApp(const MyApp());
+  Global.init().then((_) => runApp(const MyApp()));
 }
