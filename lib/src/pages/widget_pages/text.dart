@@ -1,6 +1,7 @@
 import 'dart:math' as math show pi;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
 import 'package:flutter_teml/src/widgets/link_text_span.dart' show LinkText;
 
@@ -240,7 +241,10 @@ class _WidgetTextPageState extends State<WidgetTextPage> {
                       labelText: "密码",
                       hintText: "您的登录密码",
                       prefixIcon: Icon(Icons.lock),
-                      border: InputBorder.none, // 隐藏下划线
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      //border: InputBorder.none, // 隐藏下划线
                     ),
                     obscureText: true,
                     keyboardType: TextInputType.number,
@@ -257,6 +261,40 @@ class _WidgetTextPageState extends State<WidgetTextPage> {
               child: const Text("焦点切换到密码输入"),
             ),
             Divider(),
+            Container(
+              width: 500,
+              height: 300,
+              alignment: Alignment.topCenter,
+              child: TextField(
+                maxLines: 10,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  labelText: "MultiLine text",
+                  hintText: "type sth...",
+                  alignLabelWithHint: true,
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Divider(),
+            Container(
+              width: 500,
+              alignment: Alignment.topCenter,
+              child: TextFormField(
+                textCapitalization: TextCapitalization.words,
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  icon: Icon(Icons.person),
+                  filled: true,
+                  label: const Text("Number*"),
+                  hintText: "phone",
+                  prefixText: "+86",
+                ),
+                onSaved: (newValue) => {},
+                validator: (value) => null,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
+            ),
           ],
         ),
       ),
