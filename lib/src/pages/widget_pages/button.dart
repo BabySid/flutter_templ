@@ -1,6 +1,9 @@
+import 'dart:collection';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_teml/src/utils/name_provider.dart';
-import 'package:flutter_teml/src/widgets/gradient_button.dart';
 
 class WidgetButtonPage extends StatefulWidget implements NameProvider {
   static const String _name = "Button";
@@ -22,6 +25,332 @@ class _WidgetButtonPageState extends State<WidgetButtonPage> {
 
   // InputChip 数据
   final List<String> _features = ["防水", "透气", "轻量化", "耐穿", "轻便", "舒服"];
+
+  // dropdown menu
+  final TextEditingController colorController = TextEditingController();
+  final TextEditingController iconController = TextEditingController();
+  ColorLabel? selectedColor;
+  IconLabel? selectedIcon;
+
+  // menu anchor
+  MenuEntry? _lastSelection;
+  final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
+  ShortcutRegistryEntry? _shortcutsEntry;
+
+  // context menu
+  final MenuController _menuController = MenuController();
+  bool _menuWasEnabled = false;
+
+  // slider
+  double _currentSliderValue = 20;
+
+  // SegmentBtn
+  late Set<String> selection;
+
+  Color get backgroundColor => _backgroundColor;
+  Color _backgroundColor = Colors.red;
+  set backgroundColor(Color value) {
+    if (_backgroundColor != value) {
+      setState(() {
+        _backgroundColor = value;
+      });
+    }
+  }
+
+  bool get showingMessage => _showingMessage;
+  bool _showingMessage = false;
+  set showingMessage(bool value) {
+    if (_showingMessage != value) {
+      setState(() {
+        _showingMessage = value;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _disableContextMenu(); // for context menu
+
+    selection = <String>{_sizes.first, _sizes.last};
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Dispose of any previously registered shortcuts, since they are about to
+    // be replaced.
+    _shortcutsEntry?.dispose();
+    // Collect the shortcuts from the different menu selections so that they can
+    // be registered to apply to the entire app. Menus don't register their
+    // shortcuts, they only display the shortcut hint text.
+    final Map<ShortcutActivator, Intent> shortcuts =
+        <ShortcutActivator, Intent>{
+          for (final MenuEntry item in MenuEntry.values)
+            if (item.shortcut != null)
+              item.shortcut!: VoidCallbackIntent(() => _activate(item)),
+        };
+    // Register the shortcuts with the ShortcutRegistry so that they are
+    // available to the entire application.
+    _shortcutsEntry = ShortcutRegistry.of(context).addAll(shortcuts);
+  }
+
+  @override
+  void dispose() {
+    _shortcutsEntry?.dispose();
+    _buttonFocusNode.dispose();
+
+    _reenableContextMenu(); // for context menu
+
+    super.dispose();
+  }
+
+  Future<void> _disableContextMenu() async {
+    if (!kIsWeb) {
+      // Does nothing on non-web platforms.
+      return;
+    }
+    _menuWasEnabled = BrowserContextMenu.enabled;
+    if (_menuWasEnabled) {
+      await BrowserContextMenu.disableContextMenu();
+    }
+  }
+
+  void _reenableContextMenu() {
+    if (!kIsWeb) {
+      // Does nothing on non-web platforms.
+      return;
+    }
+    if (_menuWasEnabled && !BrowserContextMenu.enabled) {
+      BrowserContextMenu.enableContextMenu();
+    }
+  }
+
+  void _activate(MenuEntry selection) {
+    setState(() {
+      _lastSelection = selection;
+    });
+
+    switch (selection) {
+      case MenuEntry.about:
+        showAboutDialog(
+          context: context,
+          applicationName: 'MenuBar Sample',
+          applicationVersion: '1.0.0',
+        );
+      case MenuEntry.hideMessage:
+      case MenuEntry.showMessage:
+        showingMessage = !showingMessage;
+      case MenuEntry.colorMenu:
+        break;
+      case MenuEntry.colorRed:
+        backgroundColor = Colors.red;
+      case MenuEntry.colorGreen:
+        backgroundColor = Colors.green;
+      case MenuEntry.colorBlue:
+        backgroundColor = Colors.blue;
+    }
+  }
+
+  void _handleSecondaryTapDown(TapDownDetails details) {
+    _menuController.open(position: details.localPosition);
+  }
+
+  void _handleTapDown(TapDownDetails details) {
+    if (_menuController.isOpen) {
+      _menuController.close();
+      return;
+    }
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        // Don't open the menu on these platforms with a Ctrl-tap (or a
+        // tap).
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        // Only open the menu on these platforms if the control button is down
+        // when the tap occurs.
+        if (HardwareKeyboard.instance.logicalKeysPressed.contains(
+              LogicalKeyboardKey.controlLeft,
+            ) ||
+            HardwareKeyboard.instance.logicalKeysPressed.contains(
+              LogicalKeyboardKey.controlRight,
+            )) {
+          _menuController.open(position: details.localPosition);
+        }
+    }
+  }
+
+  Widget _buildContextMenu(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(50),
+      child: GestureDetector(
+        onTapDown: _handleTapDown,
+        onSecondaryTapDown: _handleSecondaryTapDown,
+        child: MenuAnchor(
+          controller: _menuController,
+          menuChildren: <Widget>[
+            MenuItemButton(
+              child: Text(MenuEntry.about.label),
+              onPressed: () => _activate(MenuEntry.about),
+            ),
+            if (_showingMessage)
+              MenuItemButton(
+                onPressed: () => _activate(MenuEntry.hideMessage),
+                shortcut: MenuEntry.hideMessage.shortcut,
+                child: Text(MenuEntry.hideMessage.label),
+              ),
+            if (!_showingMessage)
+              MenuItemButton(
+                onPressed: () => _activate(MenuEntry.showMessage),
+                shortcut: MenuEntry.showMessage.shortcut,
+                child: Text(MenuEntry.showMessage.label),
+              ),
+            SubmenuButton(
+              menuChildren: <Widget>[
+                MenuItemButton(
+                  onPressed: () => _activate(MenuEntry.colorRed),
+                  shortcut: MenuEntry.colorRed.shortcut,
+                  child: Text(MenuEntry.colorRed.label),
+                ),
+                MenuItemButton(
+                  onPressed: () => _activate(MenuEntry.colorGreen),
+                  shortcut: MenuEntry.colorGreen.shortcut,
+                  child: Text(MenuEntry.colorGreen.label),
+                ),
+                MenuItemButton(
+                  onPressed: () => _activate(MenuEntry.colorBlue),
+                  shortcut: MenuEntry.colorBlue.shortcut,
+                  child: Text(MenuEntry.colorBlue.label),
+                ),
+              ],
+              child: const Text('Background Color'),
+            ),
+          ],
+          child: Container(
+            alignment: Alignment.center,
+            color: backgroundColor,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Right-click anywhere on the background to show the menu.',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    showingMessage ? 'Default message' : '',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                ),
+                Text(
+                  _lastSelection != null
+                      ? 'Last Selected: ${_lastSelection!.label}'
+                      : '',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuButton(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        MenuAnchor(
+          childFocusNode: _buttonFocusNode,
+          menuChildren: <Widget>[
+            MenuItemButton(
+              leadingIcon: Icon(Icons.home),
+              child: Text(MenuEntry.about.label),
+              onPressed: () => _activate(MenuEntry.about),
+            ),
+            if (_showingMessage)
+              MenuItemButton(
+                onPressed: () => _activate(MenuEntry.hideMessage),
+                shortcut: MenuEntry.hideMessage.shortcut,
+                child: Text(MenuEntry.hideMessage.label),
+              ),
+            if (!_showingMessage)
+              MenuItemButton(
+                onPressed: () => _activate(MenuEntry.showMessage),
+                shortcut: MenuEntry.showMessage.shortcut,
+                child: Text(MenuEntry.showMessage.label),
+              ),
+            SubmenuButton(
+              menuChildren: <Widget>[
+                MenuItemButton(
+                  onPressed: () => _activate(MenuEntry.colorRed),
+                  shortcut: MenuEntry.colorRed.shortcut,
+                  child: Text(MenuEntry.colorRed.label),
+                ),
+                MenuItemButton(
+                  onPressed: () => _activate(MenuEntry.colorGreen),
+                  shortcut: MenuEntry.colorGreen.shortcut,
+                  child: Text(MenuEntry.colorGreen.label),
+                ),
+                MenuItemButton(
+                  trailingIcon: Icon(Icons.border_color),
+                  onPressed: () => _activate(MenuEntry.colorBlue),
+                  shortcut: MenuEntry.colorBlue.shortcut,
+                  child: Text(MenuEntry.colorBlue.label),
+                ),
+              ],
+              child: const Text('Background Color'),
+            ),
+          ],
+          builder: (
+            BuildContext context,
+            MenuController controller,
+            Widget? child,
+          ) {
+            return TextButton(
+              focusNode: _buttonFocusNode,
+              onPressed: () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
+              },
+              child: const Text('OPEN MENU'),
+            );
+          },
+        ),
+
+        Container(
+          alignment: Alignment.center,
+          color: backgroundColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  showingMessage ? 'default message' : '',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ),
+              Text(
+                _lastSelection != null
+                    ? 'Last Selected: ${_lastSelection!.label}'
+                    : '',
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -301,10 +630,234 @@ class _WidgetButtonPageState extends State<WidgetButtonPage> {
                   );
                 }).toList(),
           ),
-
           Divider(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DropdownMenu<ColorLabel>(
+                    initialSelection: ColorLabel.green,
+                    controller: colorController,
+                    // requestFocusOnTap is enabled/disabled by platforms when it is null.
+                    // On mobile platforms, this is false by default. Setting this to true will
+                    // trigger focus request on the text field and virtual keyboard will appear
+                    // afterward. On desktop platforms however, this defaults to true.
+                    requestFocusOnTap: true,
+                    label: const Text('Color'),
+                    onSelected: (ColorLabel? color) {
+                      setState(() {
+                        selectedColor = color;
+                      });
+                    },
+                    dropdownMenuEntries: ColorLabel.entries,
+                  ),
+                  const SizedBox(width: 24),
+                  DropdownMenu<IconLabel>(
+                    controller: iconController,
+                    enableFilter: false,
+                    enableSearch: false,
+                    requestFocusOnTap: true,
+                    leadingIcon: const Icon(Icons.search),
+                    label: const Text('Icon'),
+                    menuStyle: MenuStyle(
+                      elevation: WidgetStateProperty.all(4.0), // 可选：添加菜单阴影
+                    ),
+                    inputDecorationTheme: const InputDecorationTheme(
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                    ),
+                    onSelected: (IconLabel? icon) {
+                      setState(() {
+                        selectedIcon = icon;
+                      });
+                    },
+                    dropdownMenuEntries: IconLabel.entries,
+                  ),
+                ],
+              ),
+              if (selectedColor != null && selectedIcon != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'You selected a ${selectedColor?.label} ${selectedIcon?.label}',
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Icon(
+                        selectedIcon?.icon,
+                        color: selectedColor?.color,
+                      ),
+                    ),
+                  ],
+                )
+              else
+                const Text('Please select a color and an icon.'),
+              Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildMenuButton(context),
+                  _buildContextMenu(context),
+                ],
+              ),
+              Divider(),
+              Container(
+                alignment: Alignment.centerLeft,
+                width: 500,
+                child: Slider(
+                  value: _currentSliderValue,
+                  max: 100,
+                  divisions: 5,
+                  label: _currentSliderValue.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _currentSliderValue = value;
+                    });
+                  },
+                ),
+              ),
+              Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Badge(
+                      label: Text('My label'),
+                      backgroundColor: Colors.blueAccent,
+                      child: Icon(Icons.receipt),
+                    ),
+                    onPressed: () {},
+                  ),
+                  const SizedBox(width: 100),
+                  IconButton(
+                    icon: Badge.count(
+                      count: 9999,
+                      child: const Icon(Icons.notifications),
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+              Divider(),
+              Container(
+                alignment: Alignment.center,
+                child: SegmentedButton<String>(
+                  style: SegmentedButton.styleFrom(
+                    backgroundColor: Colors.grey[200],
+                    foregroundColor: Colors.red,
+                    selectedForegroundColor: Colors.white,
+                    selectedBackgroundColor: Colors.green,
+                  ),
+                  segments:
+                      _sizes.map((s) {
+                        return ButtonSegment<String>(
+                          value: s,
+                          label: Text(s),
+                          icon: Icon(Icons.flag_circle),
+                        );
+                      }).toList(),
+                  selected: selection,
+                  onSelectionChanged: (Set<String> newSelection) {
+                    setState(() {
+                      selection = newSelection;
+                    });
+                  },
+                  multiSelectionEnabled: true,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
+}
+
+typedef ColorEntry = DropdownMenuEntry<ColorLabel>;
+
+// DropdownMenuEntry labels and values for the first dropdown menu.
+enum ColorLabel {
+  blue('Blue', Colors.blue),
+  pink('Pink', Colors.pink),
+  green('Green', Colors.green),
+  yellow('Orange', Colors.orange),
+  grey('Grey', Colors.grey);
+
+  const ColorLabel(this.label, this.color);
+  final String label;
+  final Color color;
+
+  static final List<ColorEntry> entries = UnmodifiableListView<ColorEntry>(
+    values.map<ColorEntry>(
+      (ColorLabel color) => ColorEntry(
+        value: color,
+        label: color.label,
+        enabled: color.label != 'Grey',
+        style: MenuItemButton.styleFrom(foregroundColor: color.color),
+      ),
+    ),
+  );
+}
+
+typedef IconEntry = DropdownMenuEntry<IconLabel>;
+
+// DropdownMenuEntry labels and values for the second dropdown menu.
+enum IconLabel {
+  smile('Smile', Icons.sentiment_satisfied_outlined),
+  cloud('Cloud', Icons.cloud_outlined),
+  brush('Brush', Icons.brush_outlined),
+  heart('Heart', Icons.favorite);
+
+  const IconLabel(this.label, this.icon);
+  final String label;
+  final IconData icon;
+
+  static final List<IconEntry> entries = UnmodifiableListView<IconEntry>(
+    values.map<IconEntry>(
+      (IconLabel icon) => IconEntry(
+        value: icon,
+        label: icon.label,
+        leadingIcon: Icon(icon.icon),
+      ),
+    ),
+  );
+}
+
+/// An enhanced enum to define the available menus and their shortcuts.
+///
+/// Using an enum for menu definition is not required, but this illustrates how
+/// they could be used for simple menu systems.
+enum MenuEntry {
+  about('About'),
+  showMessage(
+    'Show Message',
+    SingleActivator(LogicalKeyboardKey.keyS, control: true),
+  ),
+  hideMessage(
+    'Hide Message',
+    SingleActivator(LogicalKeyboardKey.keyS, control: true),
+  ),
+  colorMenu('Color Menu'),
+  colorRed(
+    'Red Background',
+    SingleActivator(LogicalKeyboardKey.keyR, control: true),
+  ),
+  colorGreen(
+    'Green Background',
+    SingleActivator(LogicalKeyboardKey.keyG, control: true),
+  ),
+  colorBlue(
+    'Blue Background',
+    SingleActivator(LogicalKeyboardKey.keyB, control: true),
+  );
+
+  const MenuEntry(this.label, [this.shortcut]);
+  final String label;
+  final MenuSerializableShortcut? shortcut;
 }
