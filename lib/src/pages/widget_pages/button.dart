@@ -44,6 +44,9 @@ class _WidgetButtonPageState extends State<WidgetButtonPage> {
   // slider
   double _currentSliderValue = 20;
 
+  // radio
+  SingingCharacter? _character = SingingCharacter.lafayette;
+
   // SegmentBtn
   late Set<String> selection;
 
@@ -771,6 +774,33 @@ class _WidgetButtonPageState extends State<WidgetButtonPage> {
                   multiSelectionEnabled: true,
                 ),
               ),
+              Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Radio<SingingCharacter>(
+                    value: SingingCharacter.lafayette,
+                    groupValue: _character,
+                    onChanged: (SingingCharacter? value) {
+                      setState(() {
+                        _character = value;
+                      });
+                    },
+                  ),
+                  Radio<SingingCharacter>(
+                    value: SingingCharacter.jefferson,
+                    groupValue: _character,
+                    onChanged: (SingingCharacter? value) {
+                      setState(() {
+                        _character = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Divider(),
+              SizedBox(height: 100),
             ],
           ),
         ],
@@ -778,6 +808,8 @@ class _WidgetButtonPageState extends State<WidgetButtonPage> {
     );
   }
 }
+
+enum SingingCharacter { lafayette, jefferson }
 
 typedef ColorEntry = DropdownMenuEntry<ColorLabel>;
 
